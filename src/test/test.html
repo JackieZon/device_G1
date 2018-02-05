@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>测试</title>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+<body>
+    <div onclick="openCode()">
+        点击执行
+    </div>
+</body>
+<script src="./static/js/base.js"></script>
+<script src="./static/js/DataHandler.js"></script>
+<script src="./static/js/DataInterface.js"></script>
+<script src="./static/js/HexUtils.js"></script>
+<script src="./static/js/jquery.js"></script>
+<script src="./static/js/Packet.js"></script>
+<script src="./static/js/vconsole.min.js"></script>
+<script>
+    var vConsole = new VConsole();
+    
+    function openCode(){
+        alert('执行方法open')
+        wx.scanQRCode({
+            needResult: 0,                             // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+            scanType: ["qrCode"],                     // 可以指定扫二维码还是一维码，默认二者都有
+            success: function (ret) {
+                
+            }
+        });
+    }
+
+    var data = {"info":{"jsapi_ticket":"kgt8ON7yVITDhtdwci0qeSniGLDHxf23E2twHy5vdE1D14F6kUPhVPwuJdPDzltJbBP9eOndCLSY-aAZb9gtjQ","jsapi_appId":"wxd3660e6a9eafba17","jsapi_timestamp":"1511605314","jsapi_nonceStr":"142a412795ac46fa","jsapi_signature":"57765031589073f17bd69b3916bbd1c68e4f9ff0"},"status":true}
+    
+    wx.config({
+        beta: true,
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: data.info.jsapi_appId, // 必填，公众号的唯一标识
+        timestamp: data.info.jsapi_timestamp, // 必填，生成签名的时间戳
+        nonceStr: data.info.jsapi_nonceStr, // 必填，生成签名的随机串
+        signature: data.info.jsapi_signature,// 必填，签名，见附录1
+        jsApiList: [
+            'openWXDeviceLib',
+            'closeWXDeviceLib',
+            'getWXDeviceInfos',
+            'getWXDeviceBindTicket',
+            'getWXDeviceUnbindTicket',
+            'startScanWXDevice',
+            'stopScanWXDevice',
+            'connectWXDevice',
+            'disconnectWXDevice',
+            'sendDataToWXDevice',
+            'onWXDeviceBindStateChange',
+            'onWXDeviceStateChange',
+            'onScanWXDeviceResult',
+            'onReceiveDataFromWXDevice',
+            'onWXDeviceBluetoothStateChange',
+            'checkJsApi',
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'onMenuShareQQ',
+            'onMenuShareWeibo',
+            'onMenuShareQZone',
+            'hideMenuItems',
+            'showMenuItems',
+            'hideAllNonBaseMenuItem',
+            'showAllNonBaseMenuItem',
+            'translateVoice',
+            'startRecord',
+            'stopRecord',
+            'onVoiceRecordEnd',
+            'playVoice',
+            'onVoicePlayEnd',
+            'pauseVoice',
+            'stopVoice',
+            'uploadVoice',
+            'downloadVoice',
+            'chooseImage',
+            'previewImage',
+            'uploadImage',
+            'downloadImage',
+            'getNetworkType',
+            'openLocation',
+            'getLocation',
+            'hideOptionMenu',
+            'showOptionMenu',
+            'closeWindow',
+            'scanQRCode',
+            'chooseWXPay',
+            'openProductSpecificView',
+            'addCard',
+            'chooseCard',
+            'openCard'
+        ]
+    });
+
+    wx.ready(function () {
+        alert('微信配置初始化成功！')
+    })
+
+    wx.error(function (res) {
+        alert('wx.error:' + JSON.stringify(res));
+    });
+
+</script>
+</html>

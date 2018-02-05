@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+  <meta content="telephone=no" name="format-detection" />
+  <title></title>
+  <style>
+    body {
+      background: #ebebeb;
+    }
+  </style>
+  <script src="./static/js/flexible.js"></script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  <script src="./static/js/base.js"></script>
+  <!-- <script src="./static/js/jquery.js"></script> -->
+  <script src="./static/js/vconsole.min.js"></script>
+  <script>
+
+      function getUrlParam(name) {
+          // 构造一个含有目标参数的正则表达式对象、匹配目标参数
+          var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+          var param = window.location.search.substr(1).match(reg);
+
+          // 返回参数值
+          if (param !== null) {
+              return decodeURIComponent(param[2]);
+          } else {
+              return null;
+          }
+      }
+
+      (function(){
+        var route = getUrlParam('route');
+        var pageType = getUrlParam('pageType');
+        window.localStorage.setItem('route',route)
+        window.localStorage.setItem('pageType',pageType)
+        if(route){
+          location.href = '#/'+ route;
+        }
+      })()
+      
+  </script>
+</head>
+
+<body>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+</body>
+
+<!--<script src="./static/js/WXDevice.js" ></script>-->
+<script async="async">
+
+   var vConsole = new VConsole();
+  
+</script>
+
+</html>
