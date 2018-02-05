@@ -14,7 +14,7 @@ let state = {
         {
             //【读取】节日提醒女性生理周期提醒
             name: 'getHolidayReminder',
-            isExec: false
+            isExec: true
         },
         {
             //【读取】屏幕显示数据
