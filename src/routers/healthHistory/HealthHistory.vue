@@ -86,7 +86,7 @@
                 </div>
             </div>
 
-            <div class="motion_data">
+            <!--<div class="motion_data">
                 <div class="head_name">
                     <div class="head_img">
                         <img src="./../../assets/images/health_icon_sun@2x.png" alt="">
@@ -97,9 +97,9 @@
                 <div class="chart">
                     <div id="temperature" style="width: 100%;height:4rem;"></div>
                 </div>
-            </div>
+            </div>-->
 
-            <div class="motion_data">
+            <!--<div class="motion_data">
                 <div class="head_name">
                     <div class="head_img">
                         <img src="./../../assets/images/health_icon_air@2x.png" alt="">
@@ -110,7 +110,7 @@
                 <div class="chart">
                     <div id="altitude" style="width: 100%;height:4rem;"></div>
                 </div>
-            </div>
+            </div>-->
         </div>
     </div>
 </template>
@@ -291,8 +291,8 @@
 
                     t_data.chartHeartRate(anchor);
                     t_data.chartHandSkinTemp(anchor);
-                    t_data.chartWristHumidity(anchor);
-                    t_data.chartPressure(anchor);
+                    // t_data.chartWristHumidity(anchor);
+                    // t_data.chartPressure(anchor);
                 })
             },
 

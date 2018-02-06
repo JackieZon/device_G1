@@ -37,198 +37,198 @@ c)	《错误代码》定义：
 
 
 /**
-*  指令定义
-**/
+ *  指令定义
+ **/
 export let Cmd = {
     /**
-    *  运动
-    **/
+     *  运动
+     **/
     sports: 0xC1,
     /**
-    *  睡眠
-    **/
+     *  睡眠
+     **/
     sleep: 0xC2,
     /**
-    *  微信运动
-    **/
+     *  微信运动
+     **/
     WeChatSports: 0xC3,
     /**
-    *  温湿度气压
-    **/
+     *  温湿度气压
+     **/
     Temphumpres: 0xC5,
     /**
-    *  固件升级(手机对APP)
-    **/
+     *  固件升级(手机对APP)
+     **/
     firmwareupdate: 0xC6,
     /**
-    *  脉搏
-    **/
+     *  脉搏
+     **/
     pulse: 0xC7,
     /**
-    *  删除手环相关（约定）数据
-    **/
+     *  删除手环相关（约定）数据
+     **/
     deleteBraceletData: 0xC8,
     /**
-    *  手环电量查询
-    **/
+     *  手环电量查询
+     **/
     bracelet: 0xC9,
     /**
-    *  设置时间同步
-    **/
+     *  设置时间同步
+     **/
     setTime: 0xCA,
     /**
-    *  运动状态
-    **/
+     *  运动状态
+     **/
     sportStatus: 0xCB,
     /**
-    *  历史脉搏值
-    **/
+     *  历史脉搏值
+     **/
     historicalPulse: 0xCC,
     /**
-    *  夜间测心率状态
-    **/
+     *  夜间测心率状态
+     **/
     nightHeartRateStatus: 0xCE,
     /**
-    *  请求升级(手机对BL)
-    **/
+     *  请求升级(手机对BL)
+     **/
     requestUpgradePhoneToBL: 0xA1,
     /**
-    *  查询手环工作状态
-    **/
+     *  查询手环工作状态
+     **/
     braceletWorkStatus: 0xA2,
     /**
-    *  查询bootloader版本(手机对APP，BL)
-    **/
+     *  查询bootloader版本(手机对APP，BL)
+     **/
     bootloaderVer: 0xA3,
     /**
-    *  查询User Code版本（手机对APP）
-    **/
+     *  查询User Code版本（手机对APP）
+     **/
     userCodeVer: 0xA4,
     /**
-    *  查询蓝牙版本
-    **/
+     *  查询蓝牙版本
+     **/
     bluetoothVer: 0xA5,
     /**
-    *  LCD屏测试（工装）
-    **/
+     *  LCD屏测试（工装）
+     **/
     LCDTest: 0xA6,
     /**
-    *  心率测试（工装
-    **/
+     *  心率测试（工装
+     **/
     HeartRateTest: 0xA7,
     /**
-    *  修正温、湿、气压
-    **/
+     *  修正温、湿、气压
+     **/
     CorrectionTemphumpres: 0xA8,
     /**
-    *  查询实时时间(工装)
-    **/
+     *  查询实时时间(工装)
+     **/
     getRealTime: 0xA9,
     /**
-    *  检测温湿气压体表温度（工装）
-    **/
+     *  检测温湿气压体表温度（工装）
+     **/
     testTemphumpressurface: 0xAA,
     /**
-    *  加速度传感器值(工装)
-    **/
+     *  加速度传感器值(工装)
+     **/
     accelerationSensor: 0xAB,
     /**
-    *  强制进入应用层程序
-    **/
+     *  强制进入应用层程序
+     **/
     toApplicationLayerPrograms: 0xAD,
     /**
-    *  系统重启
-    **/
+     *  系统重启
+     **/
     reboot: 0xAE,
     /**
-    *  手环停在bootloader
-    **/
+     *  手环停在bootloader
+     **/
     stopAtBootloader: 0xAF,
     /**
-    *  女性周期/ 节日提醒
-    **/
+     *  女性周期/ 节日提醒
+     **/
     holidayReminder: 0xB1,
     /**
-    *  个人信息
-    **/
+     *  个人信息
+     **/
     personalInfo: 0xB2,
     /**
-    *  单位显示
-    **/
+     *  单位显示
+     **/
     unitDisplay: 0xB3,
     /**
-    *  生成密钥
-    **/
+     *  生成密钥
+     **/
     generateKey: 0xB4,
     /**
-    *  验证密钥
-    **/
+     *  验证密钥
+     **/
     authenticationKey: 0xB5,
     /**
-    *  电量查询（工装）
-    **/
+     *  电量查询（工装）
+     **/
     PowerInquiryTooling: 0xB6,
     /**
-    *  LCD显示数据
-    **/
-    LCDDisplayData: 0xB7,
+     *  LCD显示数据
+     **/
+    LCDDisplayData: 0xBE,
     /**
-    *  LCD显示数据New
-    **/
+     *  LCD显示数据New
+     **/
     LCDDisplayDataNew: 0xBE,
     /**
-    *  海拔气压显示
-    **/
+     *  海拔气压显示
+     **/
     altitudeAirPressure: 0xB8,
     /**
-    *  设置闪烁条件(心率、温度)
-    **/
+     *  设置闪烁条件(心率、温度)
+     **/
     SetFlashingConditions: 0xB9,
     /**
-    *  蓝牙连接间隔
-    **/
+     *  蓝牙连接间隔
+     **/
     bluetoothConnectionInterval: 0xBA,
     /**
-    *  设置步长
-    **/
+     *  设置步长
+     **/
     setStepSize: 0x91,
     /**
-    *  闪动提醒阀值
-    **/
+     *  闪动提醒阀值
+     **/
     FlashingWarningThreshold: 0x92,
     /**
-    *  基础代谢
-    **/
+     *  基础代谢
+     **/
     basalMetabolism: 0x93,
     /**
-    *  动态心率
-    **/
+     *  动态心率
+     **/
     dynamicHeartRate: 0x80,
     /**
-    *  闹钟提醒
-    **/
+     *  闹钟提醒
+     **/
     alarmClock: 0x98,
     /**
-    *  来电提醒
-    **/
+     *  来电提醒
+     **/
     setCall: 0x97,
     /**
-    *  久坐提醒
-    **/
+     *  久坐提醒
+     **/
     setSedentary: 0x9A,
     /**
-    *  震动提醒
-    **/
-    setShock:0x95,
+     *  震动提醒
+     **/
+    setShock: 0x95,
 };
 
 /**
-* 获取本帧编号
-* @Param needreply 是否需要回复bool
-* @Param sendcount 重试次数
-* @Param datadomain 数据域定义
-* @return 本帧编号（number）
-**/
+ * 获取本帧编号
+ * @Param needreply 是否需要回复bool
+ * @Param sendcount 重试次数
+ * @Param datadomain 数据域定义
+ * @return 本帧编号（number）
+ **/
 export function GetFrameNum(needreply, sendcount, datadomain) {
 
     if (typeof datadomain == "undefined") {
@@ -257,11 +257,11 @@ export function GetFrameNum(needreply, sendcount, datadomain) {
 */
 
 /**
-*  获取错误代码
-* @Param dataFrameNum 数据帧号(1-10)
-* @Param errtype 错误类型（0保留，1校验错误，2帧编号错误，3超时无应答，4数据未传完，5传输中断，6未定义
-* @return 错误代码（number）
-**/
+ *  获取错误代码
+ * @Param dataFrameNum 数据帧号(1-10)
+ * @Param errtype 错误类型（0保留，1校验错误，2帧编号错误，3超时无应答，4数据未传完，5传输中断，6未定义
+ * @return 错误代码（number）
+ **/
 export function GetErrorCode(dataFrameNum, errtype) {
 
     //数据帧编号
@@ -273,10 +273,10 @@ export function GetErrorCode(dataFrameNum, errtype) {
 }
 
 /**
-*  解码本帧编号
-* @Param framenum 本帧编号
-* @return {datadomain,needreply,sendcount}
-**/
+ *  解码本帧编号
+ * @Param framenum 本帧编号
+ * @return {datadomain,needreply,sendcount}
+ **/
 export function DecodeFrameNum(framenum) {
     /*请求帧	0	0	0	0	无数据域
    1 第一帧	    0	0	0	1	第一帧数据帧
@@ -301,11 +301,11 @@ export function DecodeFrameNum(framenum) {
 
 
 /**
-*  获取封包字节数组
-* @Param cmd 指令
-* @Param hexstr 数据（16进制字符串）
-* @return 封包字节数组
-**/
+ *  获取封包字节数组
+ * @Param cmd 指令
+ * @Param hexstr 数据（16进制字符串）
+ * @return 封包字节数组
+ **/
 export function EncodePacket(cmd, hexstr, frameNum) {
     if (typeof hexstr == "undefined") {
         hexstr = '';
@@ -318,10 +318,9 @@ export function EncodePacket(cmd, hexstr, frameNum) {
 
     //本帧编号
     var frameNumBytes;
-    if (typeof frameNum == "undefined"){
+    if (typeof frameNum == "undefined") {
         frameNumBytes = [GetFrameNum(true, 1)];
-    }
-    else{
+    } else {
         frameNumBytes = [frameNum]
     }
 
@@ -343,29 +342,28 @@ export function EncodePacket(cmd, hexstr, frameNum) {
 
 
 
-var PacketLenConfig =
-    {
-        /**
-        *  帧头 （2字节）
-        **/
-        PacketStartLen: 2,
-        /**
-        *  数据长度 （1字节）
-        **/
-        DataLenLen: 1,
-        /**
-        *  本帧编号 （1字节）
-        **/
-        FrameNumLen: 1,
-        /**
-        *  命令 （1字节）
-        **/
-        CmdLen: 1,
-        /**
-        *  校验 （1字节）
-        **/
-        CheckSumLen: 1,
-    }
+var PacketLenConfig = {
+    /**
+     *  帧头 （2字节）
+     **/
+    PacketStartLen: 2,
+    /**
+     *  数据长度 （1字节）
+     **/
+    DataLenLen: 1,
+    /**
+     *  本帧编号 （1字节）
+     **/
+    FrameNumLen: 1,
+    /**
+     *  命令 （1字节）
+     **/
+    CmdLen: 1,
+    /**
+     *  校验 （1字节）
+     **/
+    CheckSumLen: 1,
+}
 
 
 export function Packet(bytes) {
@@ -380,7 +378,7 @@ export function Packet(bytes) {
 
     // 截取数据长度字节  得到返回数据对应位置的数据长度 【 DataLenLen 】
     this.DataLen = bytes.slice(PacketLenConfig.PacketStartLen, PacketLenConfig.PacketStartLen + PacketLenConfig.DataLenLen)[0];
-    
+
     // 截取本帧编号字节(1) 截取（帧头+数据位置）到本帧编号的位置的 
     var FrameNumindex = PacketLenConfig.PacketStartLen + PacketLenConfig.DataLenLen;
     this.FrameNum = DecodeFrameNum(bytes.slice(FrameNumindex, FrameNumindex + PacketLenConfig.FrameNumLen)[0]);
@@ -389,10 +387,10 @@ export function Packet(bytes) {
     var Cmdindex = PacketLenConfig.PacketStartLen + PacketLenConfig.DataLenLen + PacketLenConfig.FrameNumLen;
     this.Cmd = bytes.slice(Cmdindex, Cmdindex + PacketLenConfig.CmdLen)[0];
 
-    if(Cmd.dynamicHeartRate == this.Cmd){
+    if (Cmd.dynamicHeartRate == this.Cmd) {
 
         this.Cmd = bytes.slice(Cmdindex, Cmdindex + PacketLenConfig.CmdLen)[0];
-        this.Cmdx = bytes.slice(Cmdindex, (Cmdindex + PacketLenConfig.CmdLen +1))[1]
+        this.Cmdx = bytes.slice(Cmdindex, (Cmdindex + PacketLenConfig.CmdLen + 1))[1]
         console.log(`
             现在是动态心率
             主命令字节【 ${this.Cmd} 】
@@ -405,13 +403,13 @@ export function Packet(bytes) {
     var Dataindex = Cmdindex + PacketLenConfig.CmdLen;
     this.Data = bytes.slice(Dataindex, Dataindex + this.DataLen - PacketLenConfig.FrameNumLen - PacketLenConfig.CmdLen);
 
-    if (this.Data.length != (this.DataLen - (PacketLenConfig.FrameNumLen+PacketLenConfig.CmdLen)) ) {
+    if (this.Data.length != (this.DataLen - (PacketLenConfig.FrameNumLen + PacketLenConfig.CmdLen))) {
         l.e("解析失败，包长度错误，实际" + this.Data.length + "字节，声明" + (this.DataLen - 2) + "字节");
         return false;
     }
 
     if (typeof Packet._initialized == "undefined") {
-        Packet.prototype.DecodePacket = function () {
+        Packet.prototype.DecodePacket = function() {
             switch (this.Cmd) {
                 //l)LCD显示数据
                 /*   运动步数	卡路里	睡眠	心率值	体表温度	湿度	环境温度	气压
@@ -431,10 +429,10 @@ export function Packet(bytes) {
                     {
                         l.i('Cmd.LCDDisplayData')
                         // if (!(typeof lcdDisplayDataHandler == "undefined")){
-                            this.QueueName = 'getLCDDisplayData'
-                            lcdDisplayDataHandler.DecodePacket(this);
+                        this.QueueName = 'getLCDDisplayData'
+                        lcdDisplayDataHandler.DecodePacket(this);
                         // }else{
-                            // l.e('Cmd.LCDDisplayData')
+                        // l.e('Cmd.LCDDisplayData')
                         // }
                         break;
                     }
@@ -444,10 +442,10 @@ export function Packet(bytes) {
                         console.log(typeof sportDataHandler)
                         console.log(window.sportDataHandler)
                         // if (!(typeof sportDataHandler == "undefined")){
-                            this.QueueName = 'getSport'
-                            sportDataHandler.DecodePacket(this);
+                        this.QueueName = 'getSport'
+                        sportDataHandler.DecodePacket(this);
                         // }else{
-                            // l.e('Cmd.sports')
+                        // l.e('Cmd.sports')
                         // }
                         break;
                     }
@@ -455,10 +453,10 @@ export function Packet(bytes) {
                     {
                         l.i('Cmd.sleep')
                         // if (!(typeof sleepDataHandler == "undefined")){
-                            this.QueueName = 'getSleep'
-                            sleepDataHandler.DecodePacket(this);
+                        this.QueueName = 'getSleep'
+                        sleepDataHandler.DecodePacket(this);
                         // }else{
-                            // l.e('Cmd.sleep')
+                        // l.e('Cmd.sleep')
                         // }
                         break;
                     }
@@ -466,10 +464,10 @@ export function Packet(bytes) {
                     {
                         l.i('Cmd.Temphumpres')
                         // if (!(typeof tempRHPressDataHandler == "undefined")){
-                            this.QueueName = 'getTempRHPress'
-                            tempRHPressDataHandler.DecodePacket(this);
+                        this.QueueName = 'getTempRHPress'
+                        tempRHPressDataHandler.DecodePacket(this);
                         // }else{
-                            // l.e('Cmd.Temphumpres')
+                        // l.e('Cmd.Temphumpres')
                         // }
                         break;
                     }
@@ -477,19 +475,19 @@ export function Packet(bytes) {
                     {
                         l.i('Cmd.historicalPulse')
                         // if (!(typeof pulseDataHandler == "undefined")){
-                            this.QueueName = 'getHistoricalPulse'
-                            pulseDataHandler.DecodePacket(this);
+                        this.QueueName = 'getHistoricalPulse'
+                        pulseDataHandler.DecodePacket(this);
                         // }else{
-                            // l.e('Cmd.historicalPulse')
+                        // l.e('Cmd.historicalPulse')
                         // }
                         break;
                     }
                 default:
                     {
                         // if (!(typeof dataHandler == "undefined")){
-                            dataHandler.DecodePacket(this);
+                        dataHandler.DecodePacket(this);
                         // }else{
-                            // l.e('dataHandler')
+                        // l.e('dataHandler')
                         // }
                         break;
                     }
@@ -502,10 +500,10 @@ export function Packet(bytes) {
 }
 
 /**
-*  计算校验和
-* @Param dataBytes 数据bytes
-* @return number校验和
-**/
+ *  计算校验和
+ * @Param dataBytes 数据bytes
+ * @return number校验和
+ **/
 export function GetCheckSum(dataBytes) {
     var checksum = 0;
     for (var i = 0; i < dataBytes.length; i++) {

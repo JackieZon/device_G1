@@ -39,7 +39,7 @@
                     </yd-cell-item> -->
             </yd-cell-group>
  <!-- v-if="sex==0" -->
-            <yd-cell-group v-if="sex==0">
+            <!--<yd-cell-group v-if="sex==0">
                 <yd-cell-item>
                     <span slot="left" class="setting-name">女性生理期</span>
                     <span slot="right">
@@ -54,7 +54,7 @@
                 <yd-cell-item arrow type="a" @click.native="openPages('Male',{})">
                     <span slot="left">重要日期提醒</span>
                 </yd-cell-item>
-            </yd-cell-group>
+            </yd-cell-group>-->
 
             <yd-cell-group>
                 <yd-cell-item arrow type="a" @click.native="openPages('Clock',{})">
