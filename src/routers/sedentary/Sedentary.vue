@@ -14,16 +14,10 @@
                     <yd-switch v-model="postData.status" @click.native="changeSedentary"></yd-switch>
                 </span>
             </yd-cell-item>
-            <yd-cell-item arrow>
+            <yd-cell-item arrow @click.native="timePeriod.visible=true">
                 <span slot="left">提醒周期</span>
 
-                <span slot="right">
-                    <select v-model="chooseType" dir="rtl">
-                        <option value="00000000">只响一次</option>
-                        <option value="00111110">周一到周五</option>
-                        <option value="2">自定义</option>
-                    </select>
-                </span>
+                <span slot="right">{{timePeriodShow}}</span>
 
             </yd-cell-item>
             <yd-cell-item arrow>
@@ -74,8 +68,15 @@
                     </yd-cell-item>
                 </yd-cell-group>
             </div>
-
+            <div class="btn">
+                <yd-button size="large" type="hollow" @click.native="chooseDay=false">取消</yd-button>
+                <yd-button size="large" type="hollow" @click.native="chooseDay=false">确定</yd-button>
+            </div>
         </yd-popup>
+
+        <picker class="picker" v-model="timePeriod.visible" :data-items="timePeriod.items" @change="timePeriodChange">
+            <TitleCom slot="top-content" title="提醒次数" v-on:cancel="timePeriod.visible=false" v-on:confirm="timePeriodConfirm"></TitleCom>
+        </picker>
 
     </div>
 </template>
@@ -87,8 +88,8 @@
     //     startTime: [],
     //     endTime: [],
     // }
-
-import RightStroke from './../../common/RightStroke'
+import picker from 'vue-3d-picker'
+import TitleCom from './../../common/TitleCom.vue'
 import { CellSwipe } from 'mint-ui'
 import { apiUrl } from "./../../utils/subei_config.js"
 import { Toast, Loading, Confirm } from 'vue-ydui/dist/lib.rem/dialog'
@@ -101,10 +102,35 @@ import { success, confirm, toast } from './../../utils/toast.js'
             [Accordion.name]: Accordion,
             [AccordionItem.name]: AccordionItem,
             [CellSwipe.name]: CellSwipe,
-            RightStroke
+            [picker.name]: picker,
+            TitleCom
         },
         data () {
             return {
+                timePeriodShow: '每天',
+                timePeriodType: [
+                    {
+                        text: '每天',
+                        code: '11111111'
+                    },
+                    {
+                        text: '周一到周五',
+                        code: '00111110'
+                    },
+                    {
+                        text: '自定义',
+                        code: '2'
+                    },
+                ],
+                timePeriod:{
+                    chooseVal: 100,
+                    visible: false,
+                    items: [
+                        {
+                            values: ['每天', '周一到周五', '自定义'],
+                        }
+                    ]
+                },
                 chooseDay: false,
                 chooseType: '00000000',
                 startTime: '',
@@ -213,6 +239,18 @@ import { success, confirm, toast } from './../../utils/toast.js'
                 'saveSedentary',
                 'saveFlagObj'
             ]),
+            timePeriodChange(val){
+                this.timePeriod.chooseVal = val;
+            },
+            timePeriodConfirm(){
+                this.timePeriodShow = this.timePeriod.chooseVal;
+                let chosoeType = this.timePeriodType.filter((item)=>{
+                    return item.text == this.timePeriod.chooseVal;
+                })
+                console.error(chosoeType)
+                // this.postData.heartRateCountRemind = this.timePeriod.chooseVal;
+                this.timePeriod.visible = false;
+            },
             changeSedentary(){
                 setTimeout(()=>{
                     // 保存久坐提醒数据
@@ -289,6 +327,14 @@ import { success, confirm, toast } from './../../utils/toast.js'
                         }
                     }
                 }
+            }
+        }
+        .btn{
+            display: flex;
+            justify-content: space-between;
+            button{
+                width: 48%;
+                margin: 0!important;
             }
         }
         select{

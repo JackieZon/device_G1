@@ -36,12 +36,12 @@
         <yd-cell-item>
           <span slot="left" class="setting-name">整点心率</span>
           <span slot="right">
-            <yd-switch v-model="heartRateGaugeData.status" @click.native="toastShow()"></yd-switch>
+            <yd-switch v-model="heartRateGaugeData.status" @click.native="openSetFrequencyData"></yd-switch>
           </span>
         </yd-cell-item>
       </div>
-      <div class="heart-rate">
-        <yd-cell-item>
+      <div class="heart-rate" v-if="hiedDiv">
+        <yd-cell-item arrow>
           <span slot="left" class="setting-name">测量频率</span>
           <span slot="right" @click="heartRateGauge.visible=true">{{(heartRateGaugeData.value==null||heartRateGaugeData.value=='null')?0:heartRateGaugeData.value}}分钟</span>
         </yd-cell-item>
@@ -50,10 +50,10 @@
     </div>
 
     <picker class="picker" v-model="heartRateMax.visible" :data-items="heartRateMax.items" @change="heartRateMaxChange">
-        <TitleCom slot="top-content" title="最心率" v-on:cancel="heartRateMax.visible=false" v-on:confirm="heartRateMaxConfirm"></TitleCom>
+        <TitleCom slot="top-content" title="心率提醒" v-on:cancel="heartRateMax.visible=false" v-on:confirm="heartRateMaxConfirm"></TitleCom>
     </picker>
     <picker class="picker" v-model="heartRateMin.visible" :data-items="heartRateMin.items" @change="heartRateMinChange">
-        <TitleCom slot="top-content" title="低心率" v-on:cancel="heartRateMin.visible=false" v-on:confirm="heartRateMinConfirm"></TitleCom>
+        <TitleCom slot="top-content" title="心率提醒" v-on:cancel="heartRateMin.visible=false" v-on:confirm="heartRateMinConfirm"></TitleCom>
     </picker>
     <picker class="picker" v-model="heartRateGauge.visible" :data-items="heartRateGauge.items" @change="heartRateGaugeChange">
         <TitleCom slot="top-content" title="测量频率" v-on:cancel="heartRateGauge.visible=false" v-on:confirm="heartRateGaugeConfirm"></TitleCom>
@@ -63,10 +63,10 @@
 </template>
 <script>
 import TitleCom from './../../common/TitleCom.vue'
-import picker from 'vue-3d-picker';
+import picker from 'vue-3d-picker'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import { setDeciceSetInfo } from "./../../sverse/api.js"
-import { toast } from '../../utils/toast';
+import { toast } from '../../utils/toast'
 export default {
   data(){
     return {
@@ -75,7 +75,7 @@ export default {
         visible: false,
         items: [
             {
-                values: ['80', '85', '90', '95', '100'],
+                values: ['80', '85', '90', '95', '100', '150'],
             }
         ]
       },
@@ -93,15 +93,16 @@ export default {
         visible: false,
         items: [
             {
-                values: ['5', '10', '15', '20', '30'],
+                values: ['5', '10', '15', '20', '30', '60'],
             }
         ]
       },
       a:1,
+      hiedDiv: false,
       heartRateRemind: false,
       heartRateGaugeData: {
         status: false,
-        value: 0,
+        value: 60,
       },
       postData: {
           deviceType: 2,
@@ -121,11 +122,24 @@ export default {
       TitleCom,
   },
   mounted () {
+
     this.heartRateRemind = (this.deviceInfoSeting.heartRateRemind==1?true:false)
     this.postData = {...this.postData, ...this.deviceInfoSeting}
-    this.heartRateGaugeData.status = localStorage.getItem('heartRateGaugeStatus')
+
+    if(localStorage.getItem('heartRateGaugeStatus')=='null'||localStorage.getItem('heartRateGaugeStatus')==null){
+      this.heartRateGaugeData.status = false
+      this.hiedDiv = false
+    }else{
+      if(localStorage.getItem('heartRateGaugeStatus')=='true'){
+        this.heartRateGaugeData.status = true;
+        this.hiedDiv = true;
+      }else{
+        this.heartRateGaugeData.status = false;
+        this.hiedDiv = false;
+      }
+    }
+
     this.heartRateGaugeData.value = localStorage.getItem('heartRateGaugeValue')
-    // this.heartRateData.DeviceSetHeartRateTestInterval = 60
   },
   // destroyed () {
   //   l.w('HeartRate.destroyed')
@@ -147,7 +161,8 @@ export default {
   methods: {
     ...mapActions([
       'changeDeviceInfo',
-      'taskQueueExec'
+      'taskQueueExec',
+      'addSetFrequencyData'
     ]),
     ...mapMutations([
       'deviceInfoSetingSet',
@@ -165,6 +180,27 @@ export default {
         this.changeDeviceInfo()
         this.taskQueueExec({})
       })
+
+    },
+    openSetFrequencyData(){
+
+      if(this.deviceConnectState){
+
+        localStorage.setItem('heartRateGaugeToast',1)
+        setTimeout(()=>{
+          if(this.heartRateGaugeData.status){
+            localStorage.setItem('heartRateGaugeValue',this.heartRateGaugeData.value)
+            this.addSetFrequencyData()
+          }else{
+            localStorage.setItem('heartRateGaugeValue',0)
+            this.addSetFrequencyData()
+          }
+          this.taskQueueExec({})
+        },100)
+
+      }else{
+        toast({msg: '手环已断开连接，请稍后再试！'})
+      }
 
     },
     toastShow(){
@@ -230,9 +266,18 @@ export default {
     },
     'heartRateGaugeData.status'(val, vals){
       localStorage.setItem('heartRateGaugeStatus', val)
+      this.hiedDiv = val
     },
     'heartRateGaugeData.value'(val, vals){
       localStorage.setItem('heartRateGaugeValue', val)
+      localStorage.setItem('heartRateGaugeToast',0)
+      if(this.deviceConnectState){
+        this.addSetFrequencyData()
+        this.taskQueueExec({})
+      }else{
+        toast({msg: '手环已断开连接，请稍后再试！'})
+      }
+
     },
     
   }

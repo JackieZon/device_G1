@@ -14,6 +14,9 @@ let hrCountFig = 1;
 export const getStorage = {
     deviceId: ()=>{
         return window.localStorage.getItem('wecDeviceId')
+    },
+    heartRateGaugeToast: () =>{
+        return Number(window.localStorage.getItem('heartRateGaugeToast'))
     }
 }
 export function DataHandler(cmd, framesize, t_data) {
@@ -69,6 +72,25 @@ export function DataHandler(cmd, framesize, t_data) {
             l.i('DataHandler.DecodePacket')
             // 判断设备返回数据得到 0请求帧 1-10 数据帧  11发送完成 12接收错误 13接收正确 14允许发送 15数据总长度
             switch (packet.Cmd) {
+                // 获取心率设置频率值
+                case Cmd.setFrequency: {
+                    if (packet.FrameNum.datadomain == 13) {
+
+                        let heartRateGaugeToast = getStorage.heartRateGaugeToast()
+                        if(heartRateGaugeToast=='1'||heartRateGaugeToast==1){
+                            alert({msg: '设置成功！'})
+                        }else{
+                            console.error('心率频率设置成功！')
+                        }
+
+                        dispatch('taskQueueExec', { QueueName: 'setFrequencyData' })
+
+                        commit('configSet', { lastSetTime: new Date() })
+                    } else {
+                        l.e({ msg: '心率频率设置失败！' })
+                    }
+                    break;
+                }
                 case Cmd.setTime: {
                     if (packet.FrameNum.datadomain == 13) {
                         console.log('时间设置成功！')
@@ -85,7 +107,8 @@ export function DataHandler(cmd, framesize, t_data) {
                             l.w('读取电量成功！')
                             dispatch('taskQueueExec', { QueueName: 'getBattery' })
                             let bracelet = bytesToNumber(packet.Data.slice(0, 1));
-                            dispatch('deviceInfoSet', { bracelet: bracelet })
+                            dispatch('deviceInfoSet', { bracelet: bracelet });
+                            commit('configSet', { lastSetTime: new Date() });
                             l.w(`电量${bracelet}`)
                         } else {
                             l.e({ msg: '读取电量失败！' })
@@ -102,6 +125,7 @@ export function DataHandler(cmd, framesize, t_data) {
                             if (km > 0) km = (km / 10).toFixed(1);
 
                             dispatch('deviceInfoSet', { km: km })
+                            commit('configSet', { lastSetTime: new Date() });
 
                             l.w(`里程${km}`)
                         } else {
@@ -124,6 +148,7 @@ export function DataHandler(cmd, framesize, t_data) {
 
 
                                 dispatch('taskQueueExec', { QueueName: 'getPersonalInfo' })
+                                commit('configSet', { lastSetTime: new Date() });
                             }
                             else {
                                 l.w('设置身高体重成功！')
@@ -159,6 +184,7 @@ export function DataHandler(cmd, framesize, t_data) {
                                 l.w(`心率${rawDeviceSetHeartRateMax},步数目标${rawDeviceSetStepTarget},温差${rawDeviceSetTempDiff}`)
 
                                 dispatch('taskQueueExec', { QueueName: 'getFlashingWarningThreshold' })
+                                commit('configSet', { lastSetTime: new Date() });
                             }
                             else {
                                 l.w('设置提醒阀值成功！')
@@ -178,6 +204,7 @@ export function DataHandler(cmd, framesize, t_data) {
                             var ver = toAscii(bytesToHex(packet.Data)).replace("?", '');
 
                             dispatch('deviceInfoSet', { userCodeVer: ver })
+                            commit('configSet', { lastSetTime: new Date() });
                             l.w(`版本${ver}`)
                         } else {
                             l.e({ msg: '读取手环版本失败！' })
@@ -205,7 +232,8 @@ export function DataHandler(cmd, framesize, t_data) {
                                 let nextremind = bytesToNumber(packet.Data.slice(2, 3));
     
                                 dispatch('deviceInfoSet', { remindonstate: remindonstate, cycle: cycle, nextremind: nextremind })
-    
+                                commit('configSet', { lastSetTime: new Date() });
+
                                 l.w(`开关显示${remindonstate}，周期${cycle}，下次提醒天数${nextremind}`)
                             }
                         } else {
@@ -216,7 +244,7 @@ export function DataHandler(cmd, framesize, t_data) {
                 case Cmd.dynamicHeartRate:
                     {
                         if (packet.FrameNum.datadomain == 13) {
-
+                            commit('configSet', { lastSetTime: new Date() });
                             if(packet.Cmdx==1){
 
                                 this['num'] = 0;
@@ -310,6 +338,9 @@ export function DataHandler(cmd, framesize, t_data) {
                 case Cmd.alarmClock:
                     {
                         if (packet.FrameNum.datadomain == 13) {
+
+                            commit('configSet', { lastSetTime: new Date() });
+
                             console.error('查询或设置闹钟成功！')
 
                             console.error(
@@ -372,6 +403,7 @@ export function DataHandler(cmd, framesize, t_data) {
                 case Cmd.setCall:
                     {
                         if (packet.FrameNum.datadomain == 13) {
+                            commit('configSet', { lastSetTime: new Date() });
                             console.error(`来电提醒设置成功【setCallX】`)
                             dispatch('taskQueueExec', { QueueName: 'setCallX' })
                             // toast({msg: '来电提醒设置成功！'})
@@ -394,7 +426,7 @@ export function DataHandler(cmd, framesize, t_data) {
                 case Cmd.setSedentary:
                     {
                         if (packet.FrameNum.datadomain == 13) {
-                            
+                            commit('configSet', { lastSetTime: new Date() });
                             if(packet.Data.length==0){
 
                                 toast({msg: '久坐提醒设置成功！'})
@@ -437,7 +469,7 @@ export function DataHandler(cmd, framesize, t_data) {
                 case Cmd.setShock:
                     {
                         if (packet.FrameNum.datadomain == 13) {
-                            
+                            commit('configSet', { lastSetTime: new Date() });
                             if(packet.Data.length==0){
                                 toast({msg: '设置成功！'})
                                 dispatch('taskQueueExec', { QueueName: 'setyShock' })
@@ -625,13 +657,27 @@ export function LCDDisplayDataHandler(t_data) {
                 commit('configSet', { 'LCDDisplayDataHandlerSuccessFlag': true })
 
                 var sportstep = bytesToNumber(packet.Data.slice(0, 4));
-                var calorie = bytesToNumber(packet.Data.slice(4, 6));
-                var sleephour = bytesToNumber(packet.Data.slice(6, 7)) / 10;
-                var heartrate = bytesToNumber(packet.Data.slice(7, 8));
-                var bodysurfacetemp = bytesToNumber(packet.Data.slice(8, 10)) / 10;
-                var humidity = bytesToNumber(packet.Data.slice(10, 11));
-                var temperature = bytesToNumber(packet.Data.slice(11, 12));
-                var pressure = bytesToNumber(packet.Data.slice(12, 14)) / 10;
+                let km = bytesToNumber(packet.Data.slice(4, 6));
+                var calorie = bytesToNumber(packet.Data.slice(6, 8));
+                var sleephour = bytesToNumber(packet.Data.slice(8, 9)) / 10;
+                var heartrate = bytesToNumber(packet.Data.slice(9, 10));
+                var bodysurfacetemp = bytesToNumber(packet.Data.slice(10, 12)) / 10;
+                var humidity = bytesToNumber(packet.Data.slice(12, 13));
+                var temperature = bytesToNumber(packet.Data.slice(13, 14));
+                var pressure = bytesToNumber(packet.Data.slice(14, 16)) / 10;
+
+                console.error(
+                    `
+                        步数：【${sportstep}】
+                        里程：【${km}】
+                        卡路里：【${calorie}】
+                        睡眠数据：【${sleephour}】
+                        心率值：【${heartrate}】
+                        体表温度：【${bodysurfacetemp}】
+                    `
+                )
+
+                dispatch('deviceInfoSet', { km: km })
 
                 commit('LCDDisplayDataSet', {
                     sportstep: sportstep,
@@ -677,6 +723,7 @@ export function SleepDataHandler(t_data) {
     if (typeof SleepDataHandler._initialized == "undefined") {
         SleepDataHandler.prototype.ReceiveSuccess = function (callback) {
 
+            commit('configSet', { lastSetTime: new Date() });
             // DataInterface.AddDeviceDataSleep(this.DataList);
             let param = {
                 deviceId: vm.deviceInfo.wecDeviceId,
@@ -796,6 +843,7 @@ export function SportDataHandler(t_data) {
 
             // DataInterface.AddDeviceDataSport(this.DataList);
 
+            commit('configSet', { lastSetTime: new Date() });
             let param = {
                 deviceId: vm.deviceInfo.deviceId,
                 dataList: this.DataList
@@ -904,6 +952,7 @@ export function TempRHPressDataHandler(t_data) {
 
             // DataInterface.AddDeviceDataTempRHPress(this.DataList);
 
+            commit('configSet', { lastSetTime: new Date() });
             let param = {
                 deviceId: vm.deviceInfo.deviceId,
                 dataList: this.DataList
@@ -1004,6 +1053,7 @@ export function PulseDataHandler(t_data) {
 
             // DataInterface.AddDeviceDataTempRHPress(this.DataList);
 
+            commit('configSet', { lastSetTime: new Date() });
             let param = {
                 deviceId: vm.deviceInfo.deviceId,
                 dataList: this.DataList

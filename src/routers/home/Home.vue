@@ -47,7 +47,7 @@
                     <p>步数</p>
                 </div>
             </div>
-            <!-- <div class="option">
+            <div class="option">
                 <div class="option_img">
                     <img src="./../../assets/images/health_icon_03.png" alt="">
                 </div>
@@ -55,7 +55,7 @@
                     <p><span>{{deviceInfo.km}}</span>千米</p>
                     <p>里程</p>
                 </div>
-            </div> -->
+            </div>
             <div class="option">
                 <div class="option_img">
                     <img src="./../../assets/images/health_icon_04.png" alt="">
@@ -91,7 +91,7 @@
                     <img src="./../../assets/images/health_icon_07.png" alt="">
                 </div>
                 <div class="option_content">
-                    <p><span>{{LCDDisplayData.bodysurfacetemp}}</span>℃</p>
+                    <p><span>{{((Number(LCDDisplayData.bodysurfacetemp)<30||Number(LCDDisplayData.bodysurfacetemp)>200)?'F':Number(LCDDisplayData.bodysurfacetemp))}}</span>℃</p>
                     <p>手表皮温度</p>
                 </div>
             </div>
@@ -234,7 +234,7 @@
 </script>
 <style lang="less" scoped>
     #home {
-        padding-top: .25rem;//解决外边距溢出
+        padding-top: .15rem;//解决外边距溢出
         .information{
 
             display: flex;
@@ -364,7 +364,7 @@
         }
         .health{
             background: #fff;
-            margin-bottom: 10px;
+            margin-bottom: .15rem;
             .yd-cell-item{
                 height: .4rem*2;
             }
@@ -399,11 +399,11 @@
             width: 100%;
             display: flex;
             flex-wrap: wrap;
-            margin-bottom: .2rem;
+            margin-bottom: .15rem;
 
             .option {
                 width: 100%;
-                padding: .4rem 0 .4rem .2rem;
+                padding: .38rem 0 .38rem .2rem;
                 border: 1px solid #ebebeb;
                 background: white;
                 display: flex;

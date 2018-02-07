@@ -27,7 +27,7 @@ export default (url, type, param) => {
               }
             }
           } else {
-            alert({msg: '请求出错！'});
+            alert({msg: res.data.info});
           }
         }).catch((res) => {
           alert({msg: '请求出错！'});
@@ -51,7 +51,7 @@ export default (url, type, param) => {
               }
             }
           } else {
-            alert({msg: '请求出错！'});
+            alert({msg: res.data.info});
           }
         }).catch((res) => {
           alert({msg: '请求出错！'});
@@ -76,7 +76,7 @@ export default (url, type, param) => {
               }
             }
           } else {
-            alert({msg: '请求失败'})
+            alert({msg: res.data.info});
           }
         }).catch((res) => {
           alert({msg: '请求失败'})
@@ -101,7 +101,7 @@ export default (url, type, param) => {
               }
             }
           } else {
-            alert({msg: '请求失败'})
+            alert({msg: res.data.info});
           }
         }).catch((res) => {
           alert({msg: '请求出错'})
@@ -129,7 +129,7 @@ export default (url, type, param) => {
               }
             }
           } else {
-            alert({msg: '请求失败'})
+            alert({msg: res.data.info});
           }
         }).catch((res) => {
           alert({msg: '请求出错'})
@@ -155,7 +155,7 @@ export default (url, type, param) => {
               }
             }
           } else {
-            alert({msg: '请求失败'})
+            alert({msg: res.data.info});
           }
         }).catch((res) => {
           alert({msg: '请求出错'})

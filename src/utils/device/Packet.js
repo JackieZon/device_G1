@@ -220,6 +220,10 @@ export let Cmd = {
      *  震动提醒
      **/
     setShock: 0x95,
+    /**
+     *  整点心率测量频率
+     **/
+    setFrequency: 0x9B,
 };
 
 /**

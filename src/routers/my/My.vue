@@ -37,7 +37,7 @@
             </yd-cell-item>
             <yd-cell-item type="label">
                 <span slot="left">手机：</span>
-                <input slot="right" maxlength="11" type="number" :disabled="(userPhone.mobile?true:false)" v-model="userPhone.mobile" placeholder="请输入手机号">
+                <input slot="right" maxlength="11" type="number" :disabled="(userPhone.mobile.length==11?true:false)" v-model="userPhone.mobile" placeholder="请输入手机号">
             </yd-cell-item>
         </div>
         <div class="confirm">

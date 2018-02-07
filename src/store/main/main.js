@@ -23,7 +23,7 @@ let state = {
         {
             //【读取】读取里程信息
             name: 'getLCDDisplayDataNew',
-            isExec: false
+            isExec: true
         },
         {
             //【读取】读取久坐开关状态
@@ -83,7 +83,7 @@ let state = {
         {
             //【读取】读取温湿度气压
             name: 'getTempRHPress',
-            isExec: false
+            isExec: true
         },
         {
             //【读取】读取历史脉搏数据
@@ -424,9 +424,9 @@ const actions = {
             // `)
 
             let { connectState, wecDeviceId } = state.deviceInfo
-            if (connectState == false) {
-                linkBlue(wecDeviceId)
-            }
+            // if (connectState == false) {
+            //     linkBlue(wecDeviceId)
+            // }
             //保持单例运行
             if (state.mainTheadRunIng) return;
             // l.i('运行中...')
@@ -611,7 +611,6 @@ const actions = {
         changesetCall({ commit, state, dispatch, getters }, payload) {
             let num = state.setCallNum;
             if (num == '01') {
-                alert(`添加久坐提醒命令:【${num}】`)
                 state.taskQueue.push({
                     name: 'setCallX',
                     isExec: false
@@ -675,6 +674,25 @@ const actions = {
             dispatch('SendCmd', { cmd: Cmd.holidayReminder, data: '02' + bytesToHex([remindonstate, cycle, nextremind]) });
 
         },
+        setFrequencyData({ commit, state, dispatch, getters }, payload) {
+            let frequencyVal = localStorage.getItem('heartRateGaugeValue')
+            if(frequencyVal!==null&&frequencyVal!=='null'){
+                console.error(
+                    `
+                    设置心率测量频率【${frequencyVal}】
+                `
+                )
+                dispatch('SendCmd', { cmd: Cmd.setFrequency, data: '01' + bytesToHex([ Number(frequencyVal) ]) });
+            }
+
+        },
+        addSetFrequencyData({ commit, state, dispatch, getters }, payload){
+            state.taskQueue.push({
+                //添加心率频率设置
+                name: 'setFrequencyData',
+                isExec: false
+            })
+        },
         getFlashingWarningThreshold({ commit, state, dispatch, getters }, payload) {
             dispatch('SendCmd', { cmd: Cmd.FlashingWarningThreshold, data: '01' });
         },
@@ -721,14 +739,13 @@ const actions = {
                 `
                 设置提醒阀值执行
                 高心率:【${heartMax}】
-                低心率:【${heartMin}】
                 步数steptarget:【${bytesToHex(steptarget)}】
                 步数sportTarget:【${sportTarget}】
                 温差tempdiff:【${tempdiff}】
             `
             )
 
-            dispatch('SendCmd', { cmd: Cmd.FlashingWarningThreshold, data: '02' + bytesToHex([heartMax, heartMin].concat(steptarget, [tempdiff])) });
+            dispatch('SendCmd', { cmd: Cmd.FlashingWarningThreshold, data: '02' + bytesToHex([heartMax].concat(steptarget, [tempdiff])) });
 
             // dispatch('taskQueueExec', { isSetSuccess: true })
             // if (rawDeviceSetHeartRateMax != heartRateCountRemind ||
@@ -785,18 +802,20 @@ const actions = {
             window.sleepDataHandler.NeedReply = true;
             window.sleepDataHandler.DataDomain = 0;
 
-            console.error(`睡眠历史数据任务暂停的状态【${status}】`)
-            if (status === true) {
-                console.error(`睡眠被暂停后继续执行历史任务【${status}】【${data.DataDomain}】`)
-                senddataBytes(window.localStorage.wecDeviceId, { cmd: data.Cmd, data: '', dataHandler: data, t_data: t_data })
-            } else {
-                senddataBytes(state.deviceInfo.wecDeviceId, {
-                    cmd: Cmd.sleep,
-                    data: '',
-                    dataHandler: window.sleepDataHandler,
-                    t_data: t_datax
-                })
-            }
+            // console.error(`睡眠历史数据任务暂停的状态【${status}】`)
+            // if (status === true) {
+            //     console.error(`睡眠被暂停后继续执行历史任务【${status}】【${data.DataDomain}】`)
+            //     senddataBytes(window.localStorage.wecDeviceId, { cmd: data.Cmd, data: '', dataHandler: data, t_data: t_data })
+            // } else {
+
+            senddataBytes(state.deviceInfo.wecDeviceId, {
+                cmd: Cmd.sleep,
+                data: '',
+                dataHandler: window.sleepDataHandler,
+                t_data: t_datax
+            })
+
+            // }
         },
         getSport({ commit, state, dispatch, getters }, payload) {
             console.error(1)
@@ -814,28 +833,28 @@ const actions = {
                 })();
                 window.sportDataHandler = new SportDataHandler(t_datax);
             }
-            console.error(2)
-                //发送请求帧
+            // console.error(2)
+            //发送请求帧
             window.sportDataHandler.SendCount = 1;
             window.sportDataHandler.NeedReply = true;
             window.sportDataHandler.DataDomain = 0;
 
-            console.error(`运动历史数据任务暂停的状态【${status}】【${data.DataDomain}】`)
-            if (status === true) {
+            // console.error(`运动历史数据任务暂停的状态【${status}】【${data.DataDomain}】`)
+            // if (status === true) {
 
-                console.error(2.1)
-                console.error(`运动被暂停后继续执行历史任务【${status}】【${data.DataDomain}】`)
-                senddataBytes(window.localStorage.wecDeviceId, { cmd: data.Cmd, data: '', dataHandler: data, t_data: t_data })
+            //     console.error(2.1)
+            //     console.error(`运动被暂停后继续执行历史任务【${status}】【${data.DataDomain}】`)
+            //     senddataBytes(window.localStorage.wecDeviceId, { cmd: data.Cmd, data: '', dataHandler: data, t_data: t_data })
 
-            } else {
-                console.error(2.2)
-                senddataBytes(state.deviceInfo.wecDeviceId, {
-                    cmd: Cmd.sports,
-                    data: '',
-                    dataHandler: window.sportDataHandler,
-                    t_data: t_datax
-                })
-            }
+            // } else {
+            // console.error(2.2)
+            senddataBytes(state.deviceInfo.wecDeviceId, {
+                cmd: Cmd.sports,
+                data: '',
+                dataHandler: window.sportDataHandler,
+                t_data: t_datax
+            })
+            // }
         },
         getTempRHPress({ commit, state, dispatch, getters }, payload) {
             let payloadx = payload;
@@ -857,18 +876,18 @@ const actions = {
             window.tempRHPressDataHandler.NeedReply = true;
             window.tempRHPressDataHandler.DataDomain = 0;
 
-            console.error(`环境历史数据任务暂停的状态【${status}】`)
-            if (status === true) {
-                console.error(`环境被暂停后继续执行历史任务【${status}】【${data.DataDomain}】`)
-                senddataBytes(window.localStorage.wecDeviceId, { cmd: data.Cmd, data: '', dataHandler: data, t_data: t_data })
-            } else {
-                senddataBytes(state.deviceInfo.wecDeviceId, {
-                    cmd: Cmd.Temphumpres,
-                    data: '',
-                    dataHandler: window.tempRHPressDataHandler,
-                    t_data: t_datax
-                })
-            }
+            // console.error(`环境历史数据任务暂停的状态【${status}】`)
+            // if (status === true) {
+            //     console.error(`环境被暂停后继续执行历史任务【${status}】【${data.DataDomain}】`)
+            //     senddataBytes(window.localStorage.wecDeviceId, { cmd: data.Cmd, data: '', dataHandler: data, t_data: t_data })
+            // } else {
+            senddataBytes(state.deviceInfo.wecDeviceId, {
+                cmd: Cmd.Temphumpres,
+                data: '',
+                dataHandler: window.tempRHPressDataHandler,
+                t_data: t_datax
+            })
+            // }
         },
         getHistoricalPulse({ commit, state, dispatch, getters }, payload) {
             let payloadx = payload;
@@ -890,18 +909,20 @@ const actions = {
             window.pulseDataHandler.NeedReply = true;
             window.pulseDataHandler.DataDomain = 0;
 
-            console.error(`脉搏历史数据任务暂停的状态【${status}】`)
-            if (status === true) {
-                console.error(`脉搏被暂停后继续执行历史任务【${status}】【${data.DataDomain}】`)
-                senddataBytes(window.localStorage.wecDeviceId, { cmd: data.Cmd, data: '', dataHandler: data, t_data: t_data })
-            } else {
-                senddataBytes(state.deviceInfo.wecDeviceId, {
-                    cmd: Cmd.historicalPulse,
-                    data: '',
-                    dataHandler: window.pulseDataHandler,
-                    t_data: t_datax
-                })
-            }
+            // console.error(`脉搏历史数据任务暂停的状态【${status}】`)
+            // if (status === true) {
+            //     console.error(`脉搏被暂停后继续执行历史任务【${status}】【${data.DataDomain}】`)
+            //     senddataBytes(window.localStorage.wecDeviceId, { cmd: data.Cmd, data: '', dataHandler: data, t_data: t_data })
+            // } else {
+                
+            senddataBytes(state.deviceInfo.wecDeviceId, {
+                cmd: Cmd.historicalPulse,
+                data: '',
+                dataHandler: window.pulseDataHandler,
+                t_data: t_datax
+            })
+
+            // }
         },
         //更改设备信息
         changeDeviceInfo({ commit, state, dispatch, getters }, payload) {

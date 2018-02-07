@@ -37,7 +37,7 @@ export default {
       '$route' (to, from) {
         console.log(to)
         if(to.name=='DeviceSet'){
-          $('title').html('我的设备')
+          $('title').html('设置')
         }
         if(to.name=='Home'){
           this.clearHeartRateList();
