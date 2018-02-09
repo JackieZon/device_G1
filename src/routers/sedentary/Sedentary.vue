@@ -2,12 +2,6 @@
     <div id="addClock">
 
         <yd-cell-group>
-            <!-- <yd-cell-item>
-                <span slot="left">经期结束</span>
-                <span slot="right">
-                    <yd-switch v-model="female.maleEnd"></yd-switch>
-                </span>
-            </yd-cell-item> -->
             <yd-cell-item>
                 <span slot="left" class="setting-name">久坐提醒</span>
                 <span slot="right">
@@ -16,9 +10,7 @@
             </yd-cell-item>
             <yd-cell-item arrow @click.native="timePeriod.visible=true">
                 <span slot="left">提醒周期</span>
-
                 <span slot="right">{{timePeriodShow}}</span>
-
             </yd-cell-item>
             <yd-cell-item arrow>
                 <span slot="left">开始时间</span>
@@ -35,8 +27,8 @@
         </yd-cell-group>
 
         <yd-popup v-model="chooseDay" position="bottom" height="60%">
-
             <div class="box">
+                <TitleCom slot="top-content" title="提醒次数" v-on:cancel="chooseDay=false" v-on:confirm="chooseDay=false"></TitleCom>
                 <yd-cell-group>
                     <yd-cell-item>
                         <span slot="left" class="setting-name">周一</span>
@@ -67,10 +59,6 @@
                         <yd-checkbox slot="right" v-model="days[7]">&nbsp;</yd-checkbox>
                     </yd-cell-item>
                 </yd-cell-group>
-            </div>
-            <div class="btn">
-                <yd-button size="large" type="hollow" @click.native="chooseDay=false">取消</yd-button>
-                <yd-button size="large" type="hollow" @click.native="chooseDay=false">确定</yd-button>
             </div>
         </yd-popup>
 
@@ -145,20 +133,38 @@ import { success, confirm, toast } from './../../utils/toast.js'
             }
         },
         destroyed () {
-            this.saveClock()
+            if(this.postData.startTime[0]==0&&this.postData.endTime[0]==0){
+                this.saveSedentary({ startTime: [9, 0], endTime: [17,0], repeatByte: this.postData.repeatByte, status: this.postData.status })
+            }else{
+                this.saveSedentary(this.postData)
+            }
             this.addSetSedentary()
         },
         mounted () {
             
-            let now = new Date();
-            let nowtimebytes = [now.getFullYear(), (now.getMonth() + 1), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds()];
-            let month = Number(now.getMonth());
+            // let now = new Date();
+            // let nowtimebytes = [now.getFullYear(), (now.getMonth() + 1), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds()];
+            // let month = Number(now.getMonth());
 
-            this.startTime = `${9}:${0}`
-            this.endTime = `${17}:${0}`
+            // this.startTime = `${9}:${0}`
+            // this.endTime = `${17}:${0}`
 
             this.countSedentaryData()
-            this.postData = {...this.sedentaryData}
+            this.postData.repeatByte = this.sedentaryData.repeatByte
+
+            console.error(`久坐数据`)
+            console.error(this.sedentaryData)
+            if(this.sedentaryData.startTime[0]==0&&this.sedentaryData.endTime[0]==0){
+                this.startTime = `${9}:${0}`
+                this.endTime = `${17}:${0}`
+                this.postData.startTime = [9,0]
+                this.postData.endTime = [17,0]
+            }else{
+                this.startTime = this.sedentaryData.startTime.join(':')
+                this.endTime = this.sedentaryData.endTime.join(':')
+                this.postData = {...this.postData, ...this.sedentaryData } 
+            }
+
             this.postData.status = this.sedentaryStatus;
 
         },
@@ -174,25 +180,13 @@ import { success, confirm, toast } from './../../utils/toast.js'
         },
         watch:{
             sedentaryStatus(val, vals){
-                console.error(`开关值改变【${val}】`)
                 this.postData.status = val;
-            },
-            chooseType(val, vals){
-                if(val=='2'){
-                    this.chooseDay = true;
-                }else{
-                    let typeArr = val.split('')
-                    let typeArrs = typeArr.map((item, index)=>{
-                        return Number(item)
-                    })
-                    this.postData.repeatByte = typeArrs;
-                    console.log(typeArrs)
-                }
             },
             days(val,vals){
                 let typeArrs = val.map((item, index)=>{
                     return Number(item)
                 })
+                typeArrs[0] = 0
                 this.postData.repeatByte = typeArrs;
                 console.log(typeArrs)
             },
@@ -211,20 +205,36 @@ import { success, confirm, toast } from './../../utils/toast.js'
             'postData.status'(val, vals){
                 this.saveFlagObj({sedentaryStatus: val})
             },
-            'sedentaryData.startTime'(val, vals){
+            // 'sedentaryData.startTime'(val, vals){
 
-                let repeatByte = this.sedentaryData.repeatByte;
+            //     let repeatByte = this.sedentaryData.repeatByte;
 
-                let repeatByteStr = repeatByte.join('');
-                if(repeatByteStr=='00000000'){
-                    this.chooseType = '00000000'
-                }else if(repeatByteStr=='00111110'){
-                    this.chooseType = '00111110'
-                }else{
-                    this.chooseType = '2'
-                }
-                this.days = this.countDays(repeatByte)
-            }
+            //     let repeatByteStr = repeatByte.join('');
+            //     if(repeatByteStr=='11111111'){
+            //         this.timePeriodShow = '每天'
+            //     }else if(repeatByteStr=='00111110'){
+            //         this.timePeriodShow = '周一到周五'
+            //     }else{
+            //         this.timePeriodShow = '自定义'
+            //     }
+            //     this.days = this.countDays(repeatByte)
+
+            // },
+            // 'sedentaryData.repeatByte'(val, vals){
+
+            //     let repeatByte = val;
+
+            //     let repeatByteStr = repeatByte.join('');
+            //     if(repeatByteStr=='11111111'){
+            //         this.timePeriodShow = '每天'
+            //     }else if(repeatByteStr=='00111110'){
+            //         this.timePeriodShow = '周一到周五'
+            //     }else{
+            //         this.timePeriodShow = '自定义'
+            //     }
+            //     this.days = this.countDays(repeatByte)
+
+            // },
         },
         methods: {
             ...mapActions([
@@ -247,7 +257,18 @@ import { success, confirm, toast } from './../../utils/toast.js'
                 let chosoeType = this.timePeriodType.filter((item)=>{
                     return item.text == this.timePeriod.chooseVal;
                 })
-                console.error(chosoeType)
+                if(chosoeType[0].code=='2'&&chosoeType.length){
+                    this.chooseDay = true
+                }else{
+                    
+                    let typeArr = chosoeType[0].code.split('')
+                    let typeArrs = typeArr.map((item, index)=>{
+                        return Number(item)
+                    })
+                    this.postData.repeatByte = typeArrs;
+                    console.log(typeArrs)
+
+                }
                 // this.postData.heartRateCountRemind = this.timePeriod.chooseVal;
                 this.timePeriod.visible = false;
             },
@@ -268,27 +289,21 @@ import { success, confirm, toast } from './../../utils/toast.js'
                 let repeatByte = this.sedentaryData.repeatByte;
 
                 let repeatByteStr = repeatByte.join('');
-                if(repeatByteStr=='00000000'){
-                    this.chooseType = '00000000'
+                if(repeatByteStr=='11111111'){
+                    this.timePeriodShow = '每天'
                 }else if(repeatByteStr=='00111110'){
-                    this.chooseType = '00111110'
+                    this.timePeriodShow = '周一到周五'
                 }else{
-                    this.chooseType = '2'
-                    setTimeout(()=>{
-                        this.chooseDay = false
-                    },100)
+                    this.timePeriodShow = '自定义'
                 }
                 this.days = this.countDays(repeatByte)
 
-            },
-            countFlag(status){
             },
             countDays(val){
                 let typeArrs = val.map((item, index)=>{
                     return Boolean(item)
                 })
                 return typeArrs;
-                console.log(typeArrs)
             },
             countDay(arr){
                 console.log(this.clockList)
@@ -300,14 +315,6 @@ import { success, confirm, toast } from './../../utils/toast.js'
                 })
                 return counts.join(',')
             },
-            saveClock(){
-
-                this.saveSedentary(this.postData)
-
-                // setTimeout(()=>{
-                //     this.$router.back();
-                // },1000)
-            },
 
         }
     }
@@ -316,6 +323,7 @@ import { success, confirm, toast } from './../../utils/toast.js'
     #addClock{
         .box{
             .yd-cell-box{
+                margin: 0!important;
                 .yd-cell{
                     .yd-cell-item{
                         .yd-cell-right{

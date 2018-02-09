@@ -283,8 +283,8 @@ let state = {
     sedentaryData: {
         status: false,
         repeatByte: [0, 0, 0, 0, 0, 0, 0, 0],
-        startTime: [],
-        endTime: [],
+        startTime: [9,0],
+        endTime: [17,0],
     },
     setCallNum: '01'
 }
@@ -331,6 +331,8 @@ const mutations = {
         console.log(`久坐提醒保存到 store 中`)
         console.log(payload)
         state.sedentaryData = {...state.sedentaryData, ...payload }
+        console.log(`保存成功后的数据`)
+        console.log(state.sedentaryData)
     },
 
     changeClock(state, payload) {
@@ -975,6 +977,7 @@ const actions = {
         },
         addSetSedentary({ commit, state, dispatch, getters }, payload) {
             console.error('添加设置久坐【设置】')
+            console.error(state.sedentaryData)
             state.taskQueue.push({
                 //设置来电提醒
                 name: 'setSedentary',
@@ -1159,7 +1162,7 @@ const actions = {
             repeatByte,
             startTime,
             endTime,
-        } = state;
+        } = state.sedentaryData;
 
         console.log(
             `
